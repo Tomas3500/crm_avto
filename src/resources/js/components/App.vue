@@ -1,28 +1,24 @@
 <template>
   <div class="container pt-3">
     <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <router-link
-          :to="{ name: 'user.regist' }"
-          class="btn btn-primary btn-lg"
-        >
-          Зарегистрироваться</router-link
-        >
-        <router-link :to="{ name: 'user.login' }" class="btn-secondary btn-lg"
-          >Войти в систему</router-link
-        >
-        <router-view></router-view>
+      <div class="col-lg-10">
+        <HomeCrmComponent />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import HomeCrmComponent from "./HomeCrmComponent.vue";
 export default {
   name: "App",
 
   mounted() {
     console.log("Component mounted.");
+  },
+
+  components: {
+    HomeCrmComponent,
   },
 };
 </script>

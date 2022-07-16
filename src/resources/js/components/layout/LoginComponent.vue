@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <form>
+    <h1>Вход</h1>
+
+    <form @submit.prevent="login()" method="post" novalidate="true">
       <div class="mt-3">
         <label for="email_login" class="form-label"> Электроная почта</label>
         <input
@@ -10,6 +12,11 @@
           v-model="email"
           aria-describedby="emailHelp"
         />
+        <span
+          :class="{ 'form-group--error': $v.email.$error }"
+          v-if="!$v.email.required && $v.email.email"
+          >обязательное поле</span
+        >
       </div>
       <div class="mb-3">
         <label for="password_login" class="form-label">Пароль</label>
@@ -19,6 +26,16 @@
           class="form-control"
           id="password_login"
         />
+        <span
+          :class="{ 'form-group--error': $v.password.$error }"
+          v-if="!$v.password.required"
+          >обязательное поле
+        </span>
+        <span
+          :class="{ 'form-group--error': $v.password.$error }"
+          v-if="!$v.password.minLength"
+          >пароль из 8 символов</span
+        >
       </div>
       <button type="submit" @click.prevent="login" class="btn btn-primary">
         Войти
@@ -28,6 +45,8 @@
 </template>
 
 <script>
+import { email, required, minLength } from "vuelidate/lib/validators";
+
 export default {
   name: "LoginComponent",
 
@@ -39,8 +58,23 @@ export default {
     };
   },
 
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(8),
+    },
+  },
+
   methods: {
     login() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return alert("заполните поля ввода");
+      }
       axios.get("/sanctum/csrf-cookie").then((response) => {
         axios
           .post("/api/user/login", {
@@ -50,7 +84,7 @@ export default {
 
           .then((response) => {
             this.user = response.data;
-            // this.$router.push({path: '/'});
+            this.$router.push({ name: "user.cabinet" });
           });
       });
     },
@@ -61,3 +95,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+span {
+  color: red;
+}
+</style>

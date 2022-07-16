@@ -6,18 +6,37 @@ export default new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/user/regist', component: () => import('./RegistComponent'),
+            path: '/', component: () => import('./layout/RegistComponent'),
             name: 'user.regist'
         },
         {
-            path: '/user/login', component: () => import('./LoginComponent'),
+            path: '/user/login', component: () => import('./layout/LoginComponent'),
             name: 'user.login'
 
         },
 
         {
-            path: '/user/cabinet', component: () => import('./LoginComponent'),
+            path: '/cabinet', component: () => import('./HomeCrmComponent'),
             name: 'user.cabinet'
+
+        },
+
+        {
+            path: '/clint', component: () => import('./views/Clints'),
+            name: 'clint'
+
+        },
+
+        {
+            path: '/cars', component: () => import('./views/Cars'),
+            name: 'cars'
+
+        },
+
+
+        {
+            path: '/status', component: () => import('./views/Status'),
+            name: 'status'
 
         },
 

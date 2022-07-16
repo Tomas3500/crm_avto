@@ -8,7 +8,6 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import router from "./components/router";
 import App from "./components/App.vue"
-import LoginComponent from "./components/LoginComponent.vue"
 
 Vue.use(Vuelidate)
 
@@ -40,8 +39,5 @@ const app = new Vue({
     router,
     axios,
     el: '#app',
-    components: {
-        LoginComponent
-    },
     render: h => h(App)
 });
