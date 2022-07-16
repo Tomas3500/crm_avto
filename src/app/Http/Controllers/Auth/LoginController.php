@@ -49,7 +49,7 @@ class LoginController extends Controller
             return response()->json([], 404);
         }
         
-        return response()->json(User:where('email', $request->email)->first());
+        return response()->json(User::where('email', $request->email)->first());
 
     }
 }
