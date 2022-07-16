@@ -15,10 +15,10 @@ class CreateCarsTable extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
-            $table->stirng('brand');
-            $table->stirng('vin_code');
-            $table->stirng('license_plate');
-            $table->text('crash');
+            $table->string('brand');
+            $table->string('vin_code');
+            $table->string('license_plate');
+            $table->text('problem');
             $table->timestamps();
         });
     }
