@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClintController;
+use App\Http\Controllers\CarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,14 @@ Route::prefix('clint')->group(function () {
     Route::get('/index', [ClintController::class, 'index']);
     Route::delete('/{id}', [ClintController::class, 'delete']);
     Route::patch('/{clint}', [ClintController::class, 'update']);
+    
+});
+
+Route::prefix('car')->group(function () {
+    Route::post('/store', [CarController::class, 'store']);
+    Route::get('/index', [CarController::class, 'index']);
+    Route::delete('/{id}', [CarController::class, 'delete']);
+    Route::patch('/{car}', [CarController::class, 'update']);
     
 });
 
