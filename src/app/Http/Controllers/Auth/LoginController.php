@@ -42,8 +42,8 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
+    
     {
-
         if (!Auth::check($request->all())){
 
             return response()->json([], 404);
@@ -51,5 +51,15 @@ class LoginController extends Controller
         
         return response()->json(User::where('email', $request->email)->first());
 
+    }
+
+        public function logout(Request $request)
+
+    {
+
+        
+        Auth::user()->tokens()->delete();
+        
+        return response()->json(['logout']);
     }
 }

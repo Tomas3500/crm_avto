@@ -37,9 +37,7 @@
           >пароль из 8 символов</span
         >
       </div>
-      <button type="submit" @click.prevent="login" class="btn btn-primary">
-        Войти
-      </button>
+      <button type="submit" class="btn btn-primary">Войти</button>
     </form>
   </div>
 </template>
@@ -81,10 +79,10 @@ export default {
             email: this.email,
             password: this.password,
           })
-
           .then((response) => {
             this.user = response.data;
-            this.$router.push({ name: "user.cabinet" });
+            localStorage.setItem("api_token", response.data.plainTextToken);
+            //  this.$router.push({ name: "clint" });
           });
       });
     },

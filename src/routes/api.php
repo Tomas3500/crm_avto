@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,24 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-Route::post('/user/register', [RegisterController::class, 'register']);
-Route::post('/user/login', [LoginController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::group(['middleware' => 'auth:sanctum'], function() {
-//     Route::get('/get', GetController::class);
-// });
+Route::post('/user/login', [LoginController::class, 'login']);
+Route::post('/user/register', [RegisterController::class, 'register']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [LoginController::class, 'logout']);
+});
+
+Route::prefix('clint')->group(function () {
+    Route::post('/store', [ClintController::class, 'store']);
+    Route::get('/index', [ClintController::class, 'index']);
+    Route::delete('/{id}', [ClintController::class, 'delete']);
+    Route::patch('/{clint}', [ClintController::class, 'update']);
+    
+});
 

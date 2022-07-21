@@ -71,7 +71,11 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+
     }
+
+
 
     public function register(Request $request)
     {
@@ -85,7 +89,8 @@ class RegisterController extends Controller
         return response()->json(User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Str::lower(Hash::make($request->password))
-        ]));
+            'password' => Hash::make($request->password)
+        ])->createToken($request->name));
+
     }
 }

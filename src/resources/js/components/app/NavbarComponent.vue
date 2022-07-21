@@ -1,5 +1,5 @@
 <template>
-  <nav class="col-lg-4 d-none d-md-block fs-4 sidebar">
+  <nav class="col-lg-3 d-none d-md-block fs-4 sidebar">
     <div class="sidebar-sticky">
       <ul class="nav flex-column">
         <router-link
@@ -12,6 +12,8 @@
           <a class="nav-link" href="#">{{ link.nameLink }}</a>
         </router-link>
       </ul>
+      <!-- ?? -->
+      <a href="#" class="nav-link" v-on:click.prevent="logout">Выход</a>
     </div>
   </nav>
 </template>
@@ -19,9 +21,9 @@
 <script>
 export default {
   name: "navbar",
-
   data() {
     return {
+      token: null,
       links: [
         { nameLink: "Клиенты", url: "/clint", exact: true },
         { nameLink: "Автомобили", url: "/cars" },
@@ -30,8 +32,26 @@ export default {
     };
   },
 
+  methods: {
+    getToken() {
+      this.token = localStorage.getItem("api_token");
+    },
+
+    logout() {
+      axios.get("/sanctum/csrf-cookie").then((response) => {
+        axios.post("/api/logout").then((response) => {
+          console.log(localStorage.getItem("api_token"));
+          console.log(localStorage.getItem("api_token"));
+          localStorage.removeItem("api_token");
+        });
+      });
+      // this.$router.push({ name: "user.login" });
+    },
+  },
+
   mounted() {
-    console.log(this.links);
+    this.getToken();
+    console.log(this.getToken());
   },
 };
 </script>

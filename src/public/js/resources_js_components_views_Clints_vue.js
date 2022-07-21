@@ -103,9 +103,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -113,7 +110,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       name: null,
-      phone: null
+      phone: null,
+      clints: null
     };
   },
   components: {
@@ -129,12 +127,24 @@ __webpack_require__.r(__webpack_exports__);
       minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(5)
     }
   },
+  watch: {
+    phone: function phone() {// console.log(this.name);
+      // console.log(this.phone);
+    }
+  },
   methods: {
     add: function add() {
-      if (this.$v.$invalid) {
-        this.$v.$touch();
-        return;
-      }
+      // if (this.$v.$invalid) {
+      //   this.$v.$touch();
+      //   return;
+      // }
+      console.log(this.name);
+      axios.post("/api/clint/store", {
+        name: this.name,
+        phone: this.phone
+      }).then(function (response) {
+        console.log(response);
+      });
     }
   }
 });
@@ -831,15 +841,9 @@ var render = function () {
           "button",
           {
             staticClass: "btn btn-outline-dark",
-            attrs: { type: "button" },
-            on: {
-              click: function ($event) {
-                $event.preventDefault()
-                return _vm.add()
-              },
-            },
+            attrs: { type: "button", value: "store" },
           },
-          [_vm._v("\n      add\n    ")]
+          [_vm._v("\n      добавить\n    ")]
         ),
       ]
     ),

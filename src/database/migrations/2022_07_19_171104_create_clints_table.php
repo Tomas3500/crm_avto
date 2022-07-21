@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClietsTable extends Migration
+class CreateClintsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateClietsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cliets', function (Blueprint $table) {
+        Schema::create('clints', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name',255);
             $table->string('phone_number');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateClietsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cliets');
+        Schema::dropIfExists('clints');
     }
 }

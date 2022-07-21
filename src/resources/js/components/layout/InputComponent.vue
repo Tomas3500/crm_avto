@@ -36,6 +36,9 @@ export default {
     type: {
       type: String,
     },
+    value: {
+      type: String,
+    },
   },
 
   created() {

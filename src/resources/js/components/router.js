@@ -6,18 +6,18 @@ export default new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/', component: () => import('./layout/RegistComponent'),
+            path: '/user/regist', component: () => import('./layout/RegistComponent'),
             name: 'user.regist'
         },
+
         {
             path: '/user/login', component: () => import('./layout/LoginComponent'),
-            name: 'user.login'
-
+            name: 'user.login',
         },
 
         {
             path: '/cabinet', component: () => import('./HomeCrmComponent'),
-            name: 'user.cabinet'
+            name: 'user.cabinet',
 
         },
 
@@ -42,3 +42,4 @@ export default new VueRouter({
 
     ]
 })
+

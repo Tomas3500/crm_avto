@@ -9,10 +9,11 @@ try {
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
+let token = localStorage.getItem("api_token")
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 window.axios.defaults.withCredentials = true;
 
 /**
