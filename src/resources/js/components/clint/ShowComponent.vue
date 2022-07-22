@@ -71,10 +71,6 @@ export default {
     },
   },
 
-  mounted() {
-    // this.getClint();
-  },
-
   methods: {
     removeClint(id) {
       this.$emit("remove-clint", id);

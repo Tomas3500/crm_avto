@@ -11,6 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _layout_InputComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layout/InputComponent.vue */ "./resources/js/components/layout/InputComponent.vue");
 //
 //
 //
@@ -32,14 +33,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Car",
+  data: function data() {
+    return {
+      brand: null,
+      license_plate: null,
+      vin_code: null,
+      problem: null,
+      edit: false
+    };
+  },
   props: {
-    data: {
+    car: {
       type: Object
     }
   },
-  components: {}
+  components: {
+    InputComponent: _layout_InputComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  methods: {
+    removeCar: function removeCar(id) {
+      this.$emit("remove-car", id);
+    },
+    editCar: function editCar(id) {
+      this.edit = this.$emit("edit-car", id);
+    },
+    updataCar: function updataCar(id, brand, license_plate, vin_code, problem) {
+      this.$emit("update-car", id, brand, license_plate, vin_code, problem);
+    }
+  }
 });
 
 /***/ }),
@@ -85,21 +134,108 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Car",
+  name: "Cars",
   data: function data() {
     return {
       brand: null,
       license_plate: null,
       vin_code: null,
-      problem: null
+      problem: null,
+      cars: []
     };
   },
   components: {
     InputComponentVue: _layout_InputComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     ShowComponent: _car_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  mounted: function mounted() {
+    this.getCars();
+    console.log(this.getCars());
+  },
+  methods: {
+    getCars: function getCars() {
+      var _this = this;
+
+      axios.get("/api/car/index").then(function (response) {
+        _this.cars = response.data;
+      }).then(function (response) {
+        console.log(response);
+      });
+    },
+    updataCar: function updataCar(id, brand, license_plate, vin_code, problem) {
+      var _this2 = this;
+
+      axios.patch("/api/car/" + id, {
+        brand: brand,
+        license_plate: license_plate,
+        vin_code: vin_code,
+        problem: problem
+      }).then(function (response) {
+        _this2.getCars();
+
+        _this2.brand = null;
+        console.log(response);
+      });
+    },
+    removeCar: function removeCar(id) {
+      var _this3 = this;
+
+      axios["delete"]("/api/car/" + id).then(function (response) {
+        _this3.getCars();
+      });
+    },
+    editCar: function editCar(id) {
+      console.log(id);
+    },
+    add: function add() {
+      var _this4 = this;
+
+      axios.post("/api/car/store", {
+        brand: this.brand,
+        license_plate: this.license_plate,
+        vin_code: this.vin_code,
+        problem: this.problem
+      }).then(function (response) {
+        _this4.getCars();
+
+        console.log(response);
+      }); // console.log("11111");
+    }
   }
 });
 
@@ -258,40 +394,161 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table" }, [
-      _c("thead", [
-        _c("tr", [
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
-          _vm._v(" "),
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("Имя")]),
-          _vm._v(" "),
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("Фамилия")]),
-          _vm._v(" "),
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("Обращение")]),
-        ]),
+  return _c("tbody", [
+    _c("tr", [
+      _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(_vm.car.id))]),
+      _vm._v(" "),
+      _c("td", { attrs: { scope: "row" } }, [_vm._v(_vm._s(_vm.car.brand))]),
+      _vm._v(" "),
+      _c("td", { attrs: { scope: "row" } }, [
+        _vm._v(_vm._s(_vm.car.license_plate)),
       ]),
       _vm._v(" "),
-      _c("tbody", [
-        _c("tr", [
-          _c("th", { attrs: { scope: "row" } }, [_vm._v("1")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("Mark")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("Otto")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("@mdo")]),
-        ]),
+      _c("td", { attrs: { scope: "row" } }, [_vm._v(_vm._s(_vm.car.vin_code))]),
+      _vm._v(" "),
+      _c("td", { attrs: { scope: "row" } }, [_vm._v(_vm._s(_vm.car.problem))]),
+      _vm._v(" "),
+      _c("td", { attrs: { scope: "row" } }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-danger",
+            attrs: { href: "#" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.removeCar(_vm.car.id)
+              },
+            },
+          },
+          [_vm._v("удалить")]
+        ),
       ]),
-    ])
-  },
-]
+      _vm._v(" "),
+      _c("td", [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { href: "#" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.editCar(_vm.car.id)
+              },
+            },
+          },
+          [_vm._v("изминить")]
+        ),
+      ]),
+    ]),
+    _vm._v(" "),
+    _vm.edit
+      ? _c("tr", [
+          _c(
+            "td",
+            { attrs: { scope: "row" } },
+            [
+              _vm._v("\n      марка авто"),
+              _c("InputComponent", {
+                attrs: { type: "text" },
+                model: {
+                  value: _vm.brand,
+                  callback: function ($$v) {
+                    _vm.brand = typeof $$v === "string" ? $$v.trim() : $$v
+                  },
+                  expression: "brand",
+                },
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "td",
+            { attrs: { scope: "row" } },
+            [
+              _vm._v("\n      номерной знак"),
+              _c("InputComponent", {
+                attrs: { type: "text" },
+                model: {
+                  value: _vm.license_plate,
+                  callback: function ($$v) {
+                    _vm.license_plate =
+                      typeof $$v === "string" ? $$v.trim() : $$v
+                  },
+                  expression: "license_plate",
+                },
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "td",
+            { attrs: { scope: "row" } },
+            [
+              _vm._v("\n      Vin code"),
+              _c("InputComponent", {
+                attrs: { type: "text" },
+                model: {
+                  value: _vm.vin_code,
+                  callback: function ($$v) {
+                    _vm.vin_code = typeof $$v === "string" ? $$v.trim() : $$v
+                  },
+                  expression: "vin_code",
+                },
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "td",
+            { attrs: { scope: "row" } },
+            [
+              _vm._v("\n      жалоба"),
+              _c("InputComponent", {
+                attrs: { type: "text" },
+                model: {
+                  value: _vm.problem,
+                  callback: function ($$v) {
+                    _vm.problem = typeof $$v === "string" ? $$v.trim() : $$v
+                  },
+                  expression: "problem",
+                },
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("td", { attrs: { scope: "row" } }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-success",
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.updataCar(
+                      _vm.car.id,
+                      _vm.brand,
+                      _vm.license_plate,
+                      _vm.vin_code,
+                      _vm.problem
+                    )
+                  },
+                },
+              },
+              [_vm._v("Обновить")]
+            ),
+          ]),
+        ])
+      : _vm._e(),
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -315,6 +572,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "container justify-content-center" },
     [
       _c("InputComponentVue", {
         attrs: { placeholder: "Марка авто", lable: "Авто", type: "text" },
@@ -355,7 +613,7 @@ var render = function () {
         },
       }),
       _vm._v(" "),
-      _c("span"),
+      _c("div", [_vm._v("Жалобы")]),
       _vm._v(" "),
       _c("textarea", {
         directives: [
@@ -378,12 +636,71 @@ var render = function () {
         },
       }),
       _vm._v(" "),
-      _c("ShowComponent"),
+      _c("div", [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-outline-dark",
+            attrs: { type: "button", value: "store" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.add.apply(null, arguments)
+              },
+            },
+          },
+          [_vm._v("\n      добавить\n    ")]
+        ),
+      ]),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table mt-3" },
+        [
+          _c("thead", [
+            _vm.cars.lenght === 0
+              ? _c("span", [_vm._v("нет автомобиля")])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._m(0),
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.cars, function (car) {
+            return _c("ShowComponent", {
+              key: car.id,
+              attrs: { car: car },
+              on: {
+                "remove-car": _vm.removeCar,
+                "edit-car": _vm.editCar,
+                "update-car": _vm.updataCar,
+              },
+            })
+          }),
+        ],
+        2
+      ),
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("id")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("марка авто")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("номерной знак")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Vin code")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("жалоба")]),
+    ])
+  },
+]
 render._withStripped = true
 
 

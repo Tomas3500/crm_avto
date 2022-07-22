@@ -5501,8 +5501,6 @@ __webpack_require__.r(__webpack_exports__);
       type: Object
     }
   },
-  mounted: function mounted() {// this.getClint();
-  },
   methods: {
     removeClint: function removeClint(id) {
       this.$emit("remove-clint", id);
@@ -5645,7 +5643,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "clint",
-  props: {},
   data: function data() {
     return {
       clints: [],
@@ -29282,8 +29279,8 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container pt-3" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-lg-10" }, [_c("HomeCrmComponent")], 1),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [_c("HomeCrmComponent")], 1),
     ]),
   ])
 }
@@ -29365,7 +29362,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("nav", { staticClass: "col-lg-3 d-none d-md-block fs-4 sidebar" }, [
+  return _c("nav", { staticClass: "col-2 d-none d-md-block fs-4 sidebar" }, [
     _c("div", { staticClass: "sidebar-sticky" }, [
       _c(
         "ul",

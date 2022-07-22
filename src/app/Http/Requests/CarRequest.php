@@ -26,7 +26,7 @@ class CarRequest extends FormRequest
         return [
             
             //
-        'brand' =>'required|string|min:4|max:255',
+        'brand' =>'required|string|max:255',
         'vin_code'=>'required|string|max:17|size:17',
         'license_plate'=>'required|string|min:8|max:8|size:8',
         'problem'=>'nullable|string|max:250'

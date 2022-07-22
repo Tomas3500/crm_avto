@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-3">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
+    <div class="row">
+      <div class="col">
         <HomeCrmComponent />
       </div>
     </div>

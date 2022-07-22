@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Car;
 use Illuminate\Http\Request;
-use Illuminate\Http\CarRequest;
+use App\Http\Requests\CarRequest;
 
 class CarController extends Controller
 {
@@ -11,18 +11,18 @@ class CarController extends Controller
 
     public function index()
     {
-        $clints = Car::all();
+        $car = Car::all();
 
-         return response()->json($clints);
+         return response()->json($car);
 
     }
 
     public function store(CarRequest $request)
     {
         $data = $request->validated();
-        $clint = Car::create($data);
+        $car = Car::create($data);
         
-        return response()->json($clint);
+        return response()->json($car);
     }
 
 
