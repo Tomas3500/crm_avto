@@ -5,14 +5,18 @@
         placeholder="имя"
         type="text"
         lable="Имя"
-        v-model="name"
-        id="name"
+        v-model.trim="name"
       />
       <span class="invalid" v-if="$v.name.$dirty && !$v.name.required"
-        >введите поле</span
+        >заполните поле</span
       >
       <span class="invalid" v-if="!$v.name.minLength"
-        >слишком короткое имя {{ name.minLength }}</span
+        >минимально {{ $v.name.$params.minLength.min }}</span
+      >
+      <span
+        :class="{ 'form-group--error': $v.name.$error }"
+        v-if="!$v.name.maxLength"
+        >максимально {{ $v.name.$params.maxLength.max }} символов</span
       >
     </div>
     <div class="mb-3">
@@ -20,15 +24,25 @@
         placeholder="номер телефона"
         type="text"
         lable="номер телефона"
-        v-model="phone_number"
-        id="phone"
+        v-model.trim.number="phone_number"
       />
+      <span
+        class="invalid"
+        v-if="$v.phone_number.$dirty && !$v.phone_number.required"
+        >заполните поле</span
+      >
       <span
         :class="{ 'form-group--error': $v.phone_number.$error }"
         v-if="!$v.phone_number.minLength"
-        >минимально 8 символов</span
+        >минимально {{ $v.phone_number.$params.minLength.min }} символов</span
+      >
+      <span
+        :class="{ 'form-group--error': $v.phone_number.$error }"
+        v-if="!$v.phone_number.maxLength"
+        >максимально {{ $v.phone_number.$params.maxLength.max }} символов</span
       >
     </div>
+
     <button
       type="button"
       @click.prevent="add"
@@ -52,7 +66,7 @@
 <script>
 import InputComponentVue from "../layout/InputComponent.vue";
 import ShowComponent from "../clint/ShowComponent.vue";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "clint",
@@ -73,16 +87,13 @@ export default {
     name: {
       required,
       minLength: minLength(4),
+      maxLength: maxLength(50),
     },
+
     phone_number: {
       required,
-      minLength: minLength(5),
-    },
-  },
-
-  watch: {
-    clints() {
-      this.$set(this.clints);
+      minLength: minLength(10),
+      maxLength: maxLength(12),
     },
   },
 
@@ -96,9 +107,11 @@ export default {
         this.clints = response.data;
       });
     },
+
     add() {
-      if (this.$v.$invalid) {
-        return alert("заполните поля");
+      if (this.$v.$invalid && typeof this.$v.phone_number !== "number") {
+        this.$v.$touch();
+        return alert("отредактируйте поля");
       }
       axios
         .post("/api/clint/store", {
@@ -122,17 +135,14 @@ export default {
       this.id = id;
     },
 
-    updateClint(id, name, phone_number) {
+    updateClint(event) {
       axios
-        .patch("/api/clint/" + id, {
-          name: name,
-          phone_number: phone_number,
+        .patch("/api/clint/" + event.id, {
+          name: event.name,
+          phone_number: event.phone_number,
         })
-
         .then((response) => {
           this.getClint();
-          name = null;
-          phone_number = null;
         });
     },
   },

@@ -16,5 +16,10 @@ class Clint extends Model
         'name',
         'phone_number'
     ];
+
+     public function cars()
+    {
+        return $this->hasMany(Car::class);
+    }
     
 }

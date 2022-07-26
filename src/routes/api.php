@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClintController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\StatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,11 @@ Route::prefix('car')->group(function () {
     Route::get('/index', [CarController::class, 'index']);
     Route::delete('/{id}', [CarController::class, 'delete']);
     Route::patch('/{car}', [CarController::class, 'update']);
+    
+});
+
+Route::prefix('status')->group(function () {
+    Route::get('/index', [StatusController::class, 'index']);
     
 });
 

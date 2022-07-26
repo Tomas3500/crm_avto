@@ -20,5 +20,10 @@ export default {
   components: {
     HomeCrmComponent,
   },
+
+  updated() {
+    this.token = localStorage.getItem("api_token");
+    console.log(this.token);
+  },
 };
 </script>

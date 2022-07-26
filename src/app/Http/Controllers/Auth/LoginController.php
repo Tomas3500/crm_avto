@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -44,12 +45,12 @@ class LoginController extends Controller
     public function login(Request $request)
     
     {
-        if (!Auth::check($request->all())){
+        if (!Auth::attempt($request->all())){
 
             return response()->json([], 404);
         }
         
-        return response()->json(User::where('email', $request->email)->first());
+        return response()->json(User::where('email', $request->email)->first()->createToken($request->email));
 
     }
 
@@ -58,7 +59,7 @@ class LoginController extends Controller
     {
 
         
-        Auth::user()->tokens()->delete();
+        $request->user()->tokens()->delete();
         
         return response()->json(['logout']);
     }

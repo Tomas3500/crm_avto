@@ -82,7 +82,7 @@ export default {
           .then((response) => {
             this.user = response.data;
             localStorage.setItem("api_token", response.data.plainTextToken);
-            //  this.$router.push({ name: "clint" });
+            this.$router.push({ name: "clint" });
           });
       });
     },

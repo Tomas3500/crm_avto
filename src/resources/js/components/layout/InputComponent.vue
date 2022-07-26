@@ -1,10 +1,10 @@
 <template>
   <div>
-    <label :for="id">{{ lable }}</label>
+    <label>{{ lable }}</label>
     <input
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="inputHandler"
       :placeholder="placeholder"
-      :value="inputValue"
+      :value="value"
       :type="type"
       class="form-control"
     />
@@ -14,10 +14,15 @@
 <script>
 export default {
   name: "input-layout",
-  data() {
-    return {
-      inputValue: null,
-    };
+  methods: {
+    inputHandler(event) {
+      let inputCase = event.target.value;
+      if (this.toUpperCase) {
+        this.$emit("input", inputCase.toUpperCase());
+      } else {
+        this.$emit("input", inputCase);
+      }
+    },
   },
 
   props: {
@@ -29,20 +34,18 @@ export default {
       type: String,
     },
 
-    id: {
-      type: String,
-    },
-
     type: {
       type: String,
     },
-    value: {
-      type: String,
-    },
-  },
 
-  created() {
-    this.inputValue = this.value;
+    value: {
+      type: [String, Number],
+    },
+
+    toUpperCase: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>

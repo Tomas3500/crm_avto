@@ -127,7 +127,7 @@ export default {
               response.data.plainTextToken
               // config.headers["X-XSRF-TOKEN"]
             );
-            // this.$router.push({ name: "clint" });
+            this.$router.push({ name: "clint" });
           });
       });
     },

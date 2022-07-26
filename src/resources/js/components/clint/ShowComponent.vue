@@ -7,20 +7,14 @@
           <h5 class="card-title">Информация о кленте:</h5>
           <p class="card-text">Имя: {{ data.name }}</p>
           <p class="card-text">Номер телефона: {{ data.phone_number }}</p>
-          <a
-            href="#"
-            @click.prevent="removeClint(data.id)"
-            class="btn btn-danger"
+          <a href="#" @click.prevent="removeClint" class="btn btn-danger"
             >Удалить</a
           >
-          <a
-            href="#"
-            @click.prevent="editClint(data.id)"
-            class="btn btn-success"
+          <a href="#" @click.prevent="editClint" class="btn btn-success"
             >Редактировать</a
           >
         </div>
-        <div v-if="isVisibal" class="edit">
+        <div v-if="isEdit" class="edit">
           <InputComponent
             v-model="name"
             id="name"
@@ -35,10 +29,7 @@
             type="text"
             lable="номер телефона"
           />
-          <a
-            href="#"
-            @click.prevent="updateClint(data.id, name, phone_number)"
-            class="mt-2 btn btn-primary"
+          <a href="#" @click.prevent="updateClint" class="mt-2 btn btn-primary"
             >Изменить
           </a>
         </div>
@@ -57,7 +48,7 @@ export default {
       name: null,
       phone_number: null,
       clints: null,
-      isVisibal: false,
+      isEdit: false,
     };
   },
 
@@ -71,19 +62,28 @@ export default {
     },
   },
 
+  created() {
+    this.name = this.data.name;
+    this.phone_number = this.data.phone_number;
+  },
+
   methods: {
-    removeClint(id) {
-      this.$emit("remove-clint", id);
+    removeClint() {
+      this.$emit("remove-clint", this.data.id);
     },
 
-    editClint(id) {
-      this.isVisibal = true;
-      this.$emit("edit-clint", id);
+    editClint() {
+      this.isEdit = !this.isEdit;
+      this.$emit("edit-clint", this.data.id);
     },
 
-    updateClint(id, name, phone_number) {
-      this.isVisibal = false;
-      this.$emit("update-clint", id, name, phone_number);
+    updateClint() {
+      this.isEdit = false;
+      this.$emit("update-clint", {
+        id: this.data.id,
+        name: this.name,
+        phone_number: this.phone_number,
+      });
     },
   },
 };

@@ -25,8 +25,8 @@ class ClintRequest extends FormRequest
     {
         return [
             //
-            'name'=>'required|string|min:4|max:20',
-            'phone_number'=>'required|string|max:11'
+            'name'=>'required|string|min:4|max:50',
+            'phone_number'=>'required|digits:10',
         ];
     }
 

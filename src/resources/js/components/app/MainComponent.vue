@@ -1,8 +1,7 @@
 <template>
-  <main class="col-lg-9">
-    <router-view />
-    <!-- <Clint /> -->
-  </main>
+  <div>
+    <navbar-component></navbar-component>
+  </div>
 </template>
 
 <script>
@@ -11,6 +10,11 @@ export default {
   name: "dashbar",
   components: {
     // Clint,
+  },
+
+  updated() {
+    this.token = localStorage.getItem("api_token");
+    console.log(this.token);
   },
 };
 </script>

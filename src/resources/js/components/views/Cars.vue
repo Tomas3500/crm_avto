@@ -4,27 +4,61 @@
       placeholder="Марка авто"
       lable="Авто"
       type="text"
-      v-model="brand"
+      v-model.trim="brand"
     />
-
+    <span class="invalid" v-if="$v.brand.$dirty && !$v.brand.required"
+      >введите поле</span
+    >
+    <span class="invalid" v-if="!$v.brand.minLength"
+      >минимальное имя {{ $v.brand.$params.minLength.min }}
+      {{ brand.minLength }}</span
+    >
     <InputComponentVue
       class="mt-3 mb-3"
       placeholder="номерной знак"
       lable="Номерной знак автомобиля"
       type="text"
-      v-model="license_plate"
+      v-model.trim="license_plate"
     />
+    <span
+      class="invalid"
+      v-if="$v.license_plate.$dirty && !$v.license_plate.required"
+      >введите поле</span
+    >
+    <span class="invalid" v-if="!$v.license_plate.maxLength"
+      >максимально символов {{ $v.license_plate.$params.maxLength.max }}</span
+    >
     <InputComponentVue
       class="mt-3 mb-3"
       placeholder="VIN CODE"
       lable="VIN код"
       type="text"
-      v-model="vin_code"
+      v-model.trim="vin_code"
+      to-upper-case
     />
-
+    <span class="invalid" v-if="$v.vin_code.$dirty && !$v.vin_code.required"
+      >введите поле</span
+    >
+    <span class="invalid" v-if="!$v.vin_code.maxLength"
+      >максимально количество знаков
+      {{ $v.vin_code.$params.maxLength.max }}</span
+    >
     <div>Жалобы</div>
     <textarea v-model="problem" cols="70" rows="10"></textarea>
-    <div>
+
+    <!-- select clint -->
+    <div class="row">
+      <div class="col-lg-5">
+        <p>Выберте клиента</p>
+        <select mt-3 mb-3 v-model="clint_id" class="form-select">
+          <option v-for="clint in clints" :key="clint.id" :value="clint.id">
+            {{ clint.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-4">
       <button
         type="button"
         @click.prevent="add"
@@ -34,20 +68,30 @@
         добавить
       </button>
     </div>
+
+    <div class="row mt-3 align-items-center">
+      <div class="col-4">
+        <label for="search">Поиск</label>
+        <input id="search" class="form-control" type="text" v-model="search" />
+      </div>
+    </div>
+
     <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit.  -->
     <table class="table mt-3">
       <thead>
-        <span v-if="cars.lenght === 0">нет автомобиля</span>
+        <!-- <span v-if="cars.lenght === 0">нет автомобиля</span> -->
+
         <tr>
           <th scope="col">id</th>
           <th scope="col">марка авто</th>
           <th scope="col">номерной знак</th>
           <th scope="col">Vin code</th>
           <th scope="col">жалоба</th>
+          <th scope="col">клиент</th>
         </tr>
       </thead>
       <ShowComponent
-        v-for="car of cars"
+        v-for="car of searchHandler"
         :key="car.id"
         :car="car"
         @remove-car="removeCar"
@@ -61,7 +105,7 @@
 <script>
 import InputComponentVue from "../layout/InputComponent.vue";
 import ShowComponent from "../car/ShowComponent.vue";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Cars",
@@ -72,6 +116,10 @@ export default {
       vin_code: null,
       problem: null,
       cars: [],
+      clints: [],
+      clint_id: null,
+      search: "",
+      secrchSelect: "",
     };
   },
 
@@ -80,35 +128,65 @@ export default {
     ShowComponent,
   },
 
+  validations: {
+    brand: {
+      required,
+      minLength: minLength(3),
+    },
+    license_plate: {
+      required,
+      maxLength: maxLength(8),
+    },
+    vin_code: {
+      required,
+      maxLength: maxLength(17),
+    },
+    problem: {
+      required,
+      minLength: minLength(5),
+    },
+  },
+
   mounted() {
     this.getCars();
-    console.log(this.getCars());
+    this.getClint();
+  },
+
+  created() {
+    // this.cars = this.getCars();
+    // console.log(this.cars);
+  },
+
+  computed: {
+    searchHandler() {
+      return this.cars.filter((elem) => {
+        return elem.brand.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
   },
 
   methods: {
     getCars() {
-      axios
-        .get("/api/car/index")
-        .then((response) => {
-          this.cars = response.data;
-        })
-        .then((response) => {
-          console.log(response);
-        });
+      axios.get("/api/car/index").then((response) => {
+        this.cars = response.data;
+      });
     },
 
-    updataCar(id, brand, license_plate, vin_code, problem) {
+    editCar(id) {
+      this.id = id;
+    },
+
+    updataCar(event) {
+      console.log(event);
       axios
-        .patch("/api/car/" + id, {
-          brand: brand,
-          license_plate: license_plate,
-          vin_code: vin_code,
-          problem: problem,
+        .patch("/api/car/" + event.id, {
+          brand: event.brand,
+          license_plate: event.license_plate,
+          vin_code: event.vin_code,
+          clint_id: event.clint_id,
         })
         .then((response) => {
           this.getCars();
-          this.brand = null;
-          console.log(response);
         });
     },
 
@@ -118,29 +196,38 @@ export default {
       });
     },
 
-    editCar(id) {
-      console.log(id);
+    //get clint
+
+    getClint() {
+      axios.get("/api/clint/index").then((response) => {
+        this.clints = response.data;
+      });
     },
 
     add() {
+      // if (this.$v.$invalid) {
+      //   this.$v.$touch();
+      //   return;
+      // }
       axios
         .post("/api/car/store", {
           brand: this.brand,
           license_plate: this.license_plate,
           vin_code: this.vin_code,
           problem: this.problem,
+          clint_id: this.clint_id,
         })
         .then((response) => {
           this.getCars();
-          console.log(response);
         });
-
-      // console.log("11111");
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style scoped>
+span {
+  color: red;
+}
+</style>>
 

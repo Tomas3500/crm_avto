@@ -16,6 +16,13 @@ class Car extends Model
         'brand',
         'vin_code',
         'license_plate',
-        'problem'
+        'problem',
+        'clint_id'
     ];
+
+        public function clint()
+    {
+        return $this->belongsTo(Clint::class);
+    }
+
 }

@@ -42,15 +42,17 @@ const app = new Vue({
     render: h => h(App)
 });
 
-// router.beforeEach((to, from, next) => {
-//     const token = localStorage.getItem('X-XSRF-TOKEN');
+router.beforeEach((to, from, next) => {
 
-//     if ((to.name !== 'user.login' && to.name !== 'user.regist') && !token) {
-//         next({ name: 'user.regist' })
-//     }
-//     if ((to.name === 'user.login' || to.name == 'user.regist') && token) {
+    const token = localStorage.getItem('api_token');
 
-//     }
-//     next()
+    if ((to.name !== 'user.login' && to.name !== 'user.regist') && !token) {
 
-// })
+        next({ name: 'user.regist' })
+    }
+    if ((to.name === 'user.login' || to.name == 'user.regist') && token) {
+
+    }
+    next()
+
+})

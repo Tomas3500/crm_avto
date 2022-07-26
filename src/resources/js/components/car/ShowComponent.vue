@@ -6,39 +6,49 @@
       <td scope="row">{{ car.license_plate }}</td>
       <td scope="row">{{ car.vin_code }}</td>
       <td scope="row">{{ car.problem }}</td>
+      <td scope="row">{{ car.clint.name }}</td>
+
       <td scope="row">
-        <a href="#" class="btn btn-danger" @click.prevent="removeCar(car.id)"
+        <a href="#" class="btn btn-danger" @click.prevent="removeCar"
           >удалить</a
         >
       </td>
       <td>
-        <a href="#" class="btn btn-primary" @click.prevent="editCar(car.id)"
+        <a href="#" class="btn btn-primary" @click.prevent="editCar"
           >изминить</a
         >
       </td>
     </tr>
+
     <tr v-if="edit">
       <td scope="row">
-        марка авто<InputComponent v-model.trim="brand" type="text" />
+        <InputComponent
+          placeholder="авто"
+          lable="авто"
+          v-model.trim="brand"
+          type="text"
+        />
       </td>
       <td scope="row">
-        номерной знак<InputComponent v-model.trim="license_plate" type="text" />
+        <InputComponent
+          placeholder="знак"
+          lable="знак"
+          v-model.trim="license_plate"
+          type="text"
+        />
       </td>
       <td scope="row">
-        Vin code<InputComponent v-model.trim="vin_code" type="text" />
+        <InputComponent
+          placeholder="вин"
+          lable="вин"
+          v-model.trim="vin_code"
+          type="text"
+        />
       </td>
       <td scope="row">
-        жалоба<InputComponent v-model.trim="problem" type="text" />
-      </td>
-      <td scope="row">
-        <a
-          href="#"
-          class="btn btn-success"
-          @click.prevent="
-            updataCar(car.id, brand, license_plate, vin_code, problem)
-          "
-          >Обновить</a
-        >
+        <button class="btn btn-success" @click.prevent="updataCar">
+          Обновить
+        </button>
       </td>
     </tr>
   </tbody>
@@ -46,6 +56,7 @@
 
 <script>
 import InputComponent from "../layout/InputComponent.vue";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Car",
@@ -56,6 +67,7 @@ export default {
       vin_code: null,
       problem: null,
       edit: false,
+      // clint_id: null,
     };
   },
   props: {
@@ -64,21 +76,35 @@ export default {
     },
   },
 
+  created() {
+    this.brand = this.car.brand;
+    this.license_plate = this.car.license_plate;
+    this.vin_code = this.car.vin_code;
+  },
+
   components: {
     InputComponent,
   },
 
   methods: {
-    removeCar(id) {
-      this.$emit("remove-car", id);
+    removeCar() {
+      this.$emit("remove-car", this.car.id);
     },
 
-    editCar(id) {
-      this.edit = this.$emit("edit-car", id);
+    editCar() {
+      this.edit = !this.edit;
+      this.$emit("edit-car", this.car.id);
     },
 
-    updataCar(id, brand, license_plate, vin_code, problem) {
-      this.$emit("update-car", id, brand, license_plate, vin_code, problem);
+    updataCar() {
+      this.$emit("update-car", {
+        id: this.car.id,
+        brand: this.brand,
+        vin_code: this.vin_code,
+        license_plate: this.license_plate,
+        clint_id: this.car.clint.id,
+      });
+      this.edit = false;
     },
   },
 };

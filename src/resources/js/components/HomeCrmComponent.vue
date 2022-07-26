@@ -1,18 +1,27 @@
 <template>
   <div class="row">
-    <navbar-component></navbar-component>
-    <main-component></main-component>
+    <navbar-component :token="token"></navbar-component>
+    <main class="col-lg-9">
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script>
 import NavbarComponent from "./app/NavbarComponent";
-import MainComponent from "./app/MainComponent";
 export default {
   name: "HomeCrm",
   components: {
     NavbarComponent,
-    MainComponent,
+  },
+
+  data() {
+    return {
+      token: "",
+    };
+  },
+  updated() {
+    this.token = localStorage.getItem("api_token");
   },
 };
 </script>

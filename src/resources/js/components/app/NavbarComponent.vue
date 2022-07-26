@@ -13,7 +13,9 @@
         </router-link>
       </ul>
       <!-- ?? -->
-      <a href="#" class="nav-link" v-on:click.prevent="logout">Выход</a>
+      <a v-if="token" href="#" class="nav-link" v-on:click.prevent="logout"
+        >Выход</a
+      >
     </div>
   </nav>
 </template>
@@ -23,7 +25,6 @@ export default {
   name: "navbar",
   data() {
     return {
-      token: null,
       links: [
         { nameLink: "Клиенты", url: "/clint", exact: true },
         { nameLink: "Автомобили", url: "/cars" },
@@ -32,26 +33,23 @@ export default {
     };
   },
 
-  methods: {
-    getToken() {
-      this.token = localStorage.getItem("api_token");
+  props: {
+    token: {
+      type: String,
     },
+  },
 
+  methods: {
     logout() {
       axios.get("/sanctum/csrf-cookie").then((response) => {
         axios.post("/api/logout").then((response) => {
           console.log(localStorage.getItem("api_token"));
           console.log(localStorage.getItem("api_token"));
           localStorage.removeItem("api_token");
+          this.$router.push({ name: "user.login" });
         });
       });
-      // this.$router.push({ name: "user.login" });
     },
-  },
-
-  mounted() {
-    this.getToken();
-    console.log(this.getToken());
   },
 };
 </script>
