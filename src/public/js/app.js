@@ -5572,6 +5572,12 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
       return __webpack_require__.e(/*! import() */ "resources_js_components_views_Status_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./views/Status */ "./resources/js/components/views/Status.vue"));
     },
     name: 'status'
+  }, {
+    path: '*',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ "resources_js_components_NotFound_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./NotFound */ "./resources/js/components/NotFound.vue"));
+    },
+    name: 'nodfound'
   }]
 }));
 
@@ -44775,7 +44781,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_layout_RegistComponent_vue":1,"resources_js_components_layout_LoginComponent_vue":1,"resources_js_components_views_Clints_vue":1,"resources_js_components_views_Cars_vue":1,"resources_js_components_views_Status_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_layout_RegistComponent_vue":1,"resources_js_components_layout_LoginComponent_vue":1,"resources_js_components_views_Clints_vue":1,"resources_js_components_views_Cars_vue":1,"resources_js_components_views_Status_vue":1,"resources_js_components_NotFound_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

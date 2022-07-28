@@ -40,6 +40,12 @@ export default new VueRouter({
 
         },
 
+        {
+            path: '*', component: () => import('./NotFound'),
+            name: 'nodfound'
+
+        },
+
     ]
 })
 
