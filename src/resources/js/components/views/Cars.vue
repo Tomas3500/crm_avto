@@ -71,7 +71,7 @@
 
     <div class="row mt-3 align-items-center">
       <div class="col-4">
-        <label for="search">Поиск</label>
+        <label for="search">Поиск по марке автомобиля:</label>
         <input id="search" class="form-control" type="text" v-model="search" />
       </div>
     </div>
@@ -79,8 +79,7 @@
     <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit.  -->
     <table class="table mt-3">
       <thead>
-        <!-- <span v-if="cars.lenght === 0">нет автомобиля</span> -->
-
+        <span v-if="cars.lenght === 0">нет автомобиля</span>
         <tr>
           <th scope="col">id</th>
           <th scope="col">марка авто</th>
@@ -94,17 +93,28 @@
         v-for="car of searchHandler"
         :key="car.id"
         :car="car"
-        @remove-car="removeCar"
+        @modal="modal"
         @edit-car="editCar"
         @update-car="updataCar"
       />
     </table>
+    <modal-component v-if="showModal">
+      <template v-slot:body> хотите удалить? </template>
+      <template v-slot:footer>
+        <button @click.prevent="removeCar" class="btn btn-danger">
+          удалить
+        </button>
+
+        <button @click.prevent="cancel" class="btn btn-primary">отмена</button>
+      </template>
+    </modal-component>
   </div>
 </template>
 
 <script>
 import InputComponentVue from "../layout/InputComponent.vue";
 import indexClint from "../mixins/indexClint.js";
+import ModalComponent from "../ModalComponent.vue";
 
 import ShowComponent from "../car/ShowComponent.vue";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
@@ -123,12 +133,14 @@ export default {
       clint_id: null,
       search: "",
       secrchSelect: "",
+      showModal: false,
     };
   },
 
   components: {
     InputComponentVue,
     ShowComponent,
+    ModalComponent,
   },
 
   validations: {
@@ -174,7 +186,6 @@ export default {
     },
 
     updataCar(event) {
-      console.log(event);
       axios
         .patch("/api/car/" + event.id, {
           brand: event.brand,
@@ -187,16 +198,30 @@ export default {
         });
     },
 
-    removeCar(id) {
-      axios.delete("/api/car/" + id).then((response) => {
-        this.getCars();
-      });
+    removeCar() {
+      axios
+        .delete("/api/car/" + this.cars.id)
+        .then((response) => {
+          this.getCars();
+        })
+        .then((response) => {
+          this.showModal = false;
+        });
+    },
+
+    modal(id) {
+      this.showModal = true;
+      this.cars.id = id;
+    },
+
+    cancel() {
+      this.showModal = false;
     },
 
     add() {
       if (this.$v.$invalid) {
         this.$v.$touch();
-        return;
+        return alert("заполните поля");
       }
       axios
         .post("/api/car/store", {

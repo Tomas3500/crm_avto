@@ -9,9 +9,7 @@
       <td scope="row">{{ car.clint.name }}</td>
 
       <td scope="row">
-        <a href="#" class="btn btn-danger" @click.prevent="removeCar"
-          >удалить</a
-        >
+        <a href="#" class="btn btn-danger" @click.prevent="modal">удалить</a>
       </td>
       <td>
         <a href="#" class="btn btn-primary" @click.prevent="editCar"
@@ -87,8 +85,8 @@ export default {
   },
 
   methods: {
-    removeCar() {
-      this.$emit("remove-car", this.car.id);
+    modal() {
+      this.$emit("modal", this.car.id);
     },
 
     editCar() {
