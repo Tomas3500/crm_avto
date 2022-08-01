@@ -15,30 +15,20 @@
 
 <script>
 import ShowComponent from "../Status/ShowComponent.vue";
+import indexClint from "../mixins/indexClint.js";
 
 export default {
   name: "status",
+  mixins: [indexClint],
+
   data() {
     return {
-      clints: [],
       index: null,
     };
   },
 
   components: {
     ShowComponent,
-  },
-
-  mounted() {
-    this.getClint();
-  },
-
-  methods: {
-    getClint() {
-      axios.get("/api/status/index").then((response) => {
-        this.clints = response.data;
-      });
-    },
   },
 };
 </script>

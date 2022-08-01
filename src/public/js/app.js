@@ -5280,15 +5280,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "App",
-  mounted: function mounted() {
-    console.log("Component mounted.");
-  },
   components: {
     HomeCrmComponent: _HomeCrmComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   updated: function updated() {
     this.token = localStorage.getItem("api_token");
-    console.log(this.token);
   }
 });
 

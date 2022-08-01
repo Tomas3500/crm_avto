@@ -13,17 +13,12 @@ import HomeCrmComponent from "./HomeCrmComponent.vue";
 export default {
   name: "App",
 
-  mounted() {
-    console.log("Component mounted.");
-  },
-
   components: {
     HomeCrmComponent,
   },
 
   updated() {
     this.token = localStorage.getItem("api_token");
-    console.log(this.token);
   },
 };
 </script>

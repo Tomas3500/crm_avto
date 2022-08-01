@@ -104,11 +104,15 @@
 
 <script>
 import InputComponentVue from "../layout/InputComponent.vue";
+import indexClint from "../mixins/indexClint.js";
+
 import ShowComponent from "../car/ShowComponent.vue";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Cars",
+  mixins: [indexClint],
+
   data() {
     return {
       brand: null,
@@ -116,7 +120,6 @@ export default {
       vin_code: null,
       problem: null,
       cars: [],
-      clints: [],
       clint_id: null,
       search: "",
       secrchSelect: "",
@@ -149,12 +152,6 @@ export default {
 
   mounted() {
     this.getCars();
-    this.getClint();
-  },
-
-  created() {
-    // this.cars = this.getCars();
-    // console.log(this.cars);
   },
 
   computed: {
@@ -196,19 +193,11 @@ export default {
       });
     },
 
-    //get clint
-
-    getClint() {
-      axios.get("/api/clint/index").then((response) => {
-        this.clints = response.data;
-      });
-    },
-
     add() {
-      // if (this.$v.$invalid) {
-      //   this.$v.$touch();
-      //   return;
-      // }
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
       axios
         .post("/api/car/store", {
           brand: this.brand,

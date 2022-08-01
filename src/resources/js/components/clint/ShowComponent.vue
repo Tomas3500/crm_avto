@@ -7,9 +7,7 @@
           <h5 class="card-title">Информация о кленте:</h5>
           <p class="card-text">Имя: {{ data.name }}</p>
           <p class="card-text">Номер телефона: {{ data.phone_number }}</p>
-          <a href="#" @click.prevent="removeClint" class="btn btn-danger"
-            >Удалить</a
-          >
+          <a href="#" @click.prevent="modal" class="btn btn-danger">Удалить</a>
           <a href="#" @click.prevent="editClint" class="btn btn-success"
             >Редактировать</a
           >
@@ -68,8 +66,8 @@ export default {
   },
 
   methods: {
-    removeClint() {
-      this.$emit("remove-clint", this.data.id);
+    modal() {
+      this.$emit("modal", this.data.id);
     },
 
     editClint() {

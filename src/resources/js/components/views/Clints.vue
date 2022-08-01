@@ -51,8 +51,9 @@
     >
       добавить
     </button>
+    <!-- @remove-clint="removeClint" -->
     <ShowComponent
-      @remove-clint="removeClint"
+      @modal="modal"
       @edit-clint="editClint"
       @update-clint="updateClint"
       :data="clint"
@@ -60,28 +61,43 @@
       :key="clint.id"
     />
     <h2 v-if="clints.length === 0">нет клиентов</h2>
+    <!-- modal window -->
+    <modal-component v-if="showModal">
+      <template v-slot:body> хотите удалить? </template>
+      <template v-slot:footer>
+        <button @click.prevent="removeClint" class="btn btn-danger">
+          удалить
+        </button>
+
+        <button @click.prevent="cancel" class="btn btn-primary">отмена</button>
+      </template>
+    </modal-component>
   </div>
 </template>
 
 <script>
 import InputComponentVue from "../layout/InputComponent.vue";
+import ModalComponent from "../ModalComponent.vue";
 import ShowComponent from "../clint/ShowComponent.vue";
+import indexClint from "../mixins/indexClint.js";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "clint",
+  mixins: [indexClint],
   data() {
     return {
-      clints: [],
       name: null,
       isEdit: null,
       phone_number: null,
+      showModal: false,
     };
   },
 
   components: {
     InputComponentVue,
     ShowComponent,
+    ModalComponent,
   },
   validations: {
     name: {
@@ -97,17 +113,9 @@ export default {
     },
   },
 
-  mounted() {
-    this.getClint();
-  },
+  mounted() {},
 
   methods: {
-    getClint() {
-      axios.get("/api/clint/index").then((response) => {
-        this.clints = response.data;
-      });
-    },
-
     add() {
       if (this.$v.$invalid && typeof this.$v.phone_number !== "number") {
         this.$v.$touch();
@@ -125,10 +133,25 @@ export default {
         });
     },
 
-    removeClint(id) {
-      axios.delete("/api/clint/" + id).then((response) => {
-        this.getClint();
-      });
+    removeClint() {
+      axios
+        .delete("/api/clint/" + this.clints.id)
+        .then((response) => {
+          this.getClint();
+        })
+        .then((response) => {
+          this.showModal = false;
+        });
+    },
+
+    cancel() {
+      this.showModal = false;
+    },
+
+    modal(id) {
+      this.showModal = true;
+      this.clints.id = id;
+      console.log(id);
     },
 
     editClint(id) {

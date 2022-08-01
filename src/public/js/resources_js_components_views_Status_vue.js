@@ -60,6 +60,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Status_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Status/ShowComponent.vue */ "./resources/js/components/Status/ShowComponent.vue");
+/* harmony import */ var _mixins_indexClint_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/indexClint.js */ "./resources/js/components/mixins/indexClint.js");
 //
 //
 //
@@ -76,16 +77,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "status",
+  mixins: [_mixins_indexClint_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
-      clints: [],
       index: null
     };
   },
   components: {
     ShowComponent: _Status_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/mixins/indexClint.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/mixins/indexClint.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      clints: []
+    };
   },
   mounted: function mounted() {
     this.getClint();
@@ -94,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
     getClint: function getClint() {
       var _this = this;
 
-      axios.get("/api/status/index").then(function (response) {
+      axios.get("/api/clint/index").then(function (response) {
         _this.clints = response.data;
       });
     }

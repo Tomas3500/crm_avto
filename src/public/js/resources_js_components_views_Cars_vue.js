@@ -187,8 +187,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _layout_InputComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layout/InputComponent.vue */ "./resources/js/components/layout/InputComponent.vue");
-/* harmony import */ var _car_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../car/ShowComponent.vue */ "./resources/js/components/car/ShowComponent.vue");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var _mixins_indexClint_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/indexClint.js */ "./resources/js/components/mixins/indexClint.js");
+/* harmony import */ var _car_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../car/ShowComponent.vue */ "./resources/js/components/car/ShowComponent.vue");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
 //
 //
 //
@@ -293,11 +294,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Cars",
+  mixins: [_mixins_indexClint_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
       brand: null,
@@ -305,7 +308,6 @@ __webpack_require__.r(__webpack_exports__);
       vin_code: null,
       problem: null,
       cars: [],
-      clints: [],
       clint_id: null,
       search: "",
       secrchSelect: ""
@@ -313,32 +315,28 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     InputComponentVue: _layout_InputComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    ShowComponent: _car_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    ShowComponent: _car_ShowComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   validations: {
     brand: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
-      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.minLength)(3)
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
+      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.minLength)(3)
     },
     license_plate: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
-      maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.maxLength)(8)
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
+      maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.maxLength)(8)
     },
     vin_code: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
-      maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.maxLength)(17)
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
+      maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.maxLength)(17)
     },
     problem: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
-      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.minLength)(5)
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
+      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.minLength)(5)
     }
   },
   mounted: function mounted() {
     this.getCars();
-    this.getClint();
-  },
-  created: function created() {// this.cars = this.getCars();
-    // console.log(this.cars);
   },
   computed: {
     searchHandler: function searchHandler() {
@@ -380,21 +378,14 @@ __webpack_require__.r(__webpack_exports__);
         _this4.getCars();
       });
     },
-    //get clint
-    getClint: function getClint() {
+    add: function add() {
       var _this5 = this;
 
-      axios.get("/api/clint/index").then(function (response) {
-        _this5.clints = response.data;
-      });
-    },
-    add: function add() {
-      var _this6 = this;
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
 
-      // if (this.$v.$invalid) {
-      //   this.$v.$touch();
-      //   return;
-      // }
       axios.post("/api/car/store", {
         brand: this.brand,
         license_plate: this.license_plate,
@@ -402,7 +393,39 @@ __webpack_require__.r(__webpack_exports__);
         problem: this.problem,
         clint_id: this.clint_id
       }).then(function (response) {
-        _this6.getCars();
+        _this5.getCars();
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/mixins/indexClint.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/mixins/indexClint.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      clints: []
+    };
+  },
+  mounted: function mounted() {
+    this.getClint();
+  },
+  methods: {
+    getClint: function getClint() {
+      var _this = this;
+
+      axios.get("/api/clint/index").then(function (response) {
+        _this.clints = response.data;
       });
     }
   }
