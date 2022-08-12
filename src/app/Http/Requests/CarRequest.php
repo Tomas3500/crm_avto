@@ -26,8 +26,9 @@ class CarRequest extends FormRequest
         return [
         'brand' =>'required|string|max:255',
         'vin_code'=>'required|string|max:17',
-        'license_plate'=>'required|string|min:8|max:8|',
-        'problem'=>'nullable|string|max:250',
+        'license_plate'=>'required|string|max:8|',
+        'problem'=>'nullable|string|max:255',
+        'image' => 'nullable|file',
         'clint_id' => 'required|integer|exists:clints,id',
         ];
     }

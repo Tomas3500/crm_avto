@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClintController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\StatusController;
+// use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,3 +54,7 @@ Route::prefix('status')->group(function () {
     
 });
 
+// Route::prefix('file')->group(function () {
+//     Route::get('/index', [ImageController::class, 'index']);
+//     Route::post('/store', [ImageController::class, 'store']);
+// });

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use Illuminate\Http\Request;
 use App\Http\Requests\CarRequest;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
 
 class CarController extends Controller
 {
@@ -18,18 +21,29 @@ class CarController extends Controller
     }
 
     public function store(CarRequest $request)
-    {
+    {   
+
         $data = $request->validated();
-        $car = Car::create($data);
+        $fileNmae = $request->file('image')->getClientOriginalName();
+
+        $image = Image::make($request->file('image'));
+        $image->resize(200,200);
+
+        $image->save( public_path('storage/image/').$fileNmae);
+
+        $data['image'] = 'storage/image/'.$fileNmae;
+        Car::create($data);
+
+        return response()->json($data);
+
         
-        return response()->json($car);
     }
 
 
-        public function delete(Car $clint, $id)
+        public function delete(Car $car, $id)
     {
 
-        $clint->find($id)->delete();
+        $car->find($id)->delete();
         
         return response()->json([],200);
     }

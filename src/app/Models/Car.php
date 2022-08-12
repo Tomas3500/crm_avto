@@ -17,7 +17,8 @@ class Car extends Model
         'vin_code',
         'license_plate',
         'problem',
-        'clint_id'
+        'clint_id',
+        'image'
     ];
 
         public function clint()

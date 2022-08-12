@@ -7,6 +7,9 @@
       <td scope="row">{{ car.vin_code }}</td>
       <td scope="row">{{ car.problem }}</td>
       <td scope="row">{{ car.clint.name }}</td>
+      <td scope="row">
+        <img :src="car.image" alt="" />
+      </td>
 
       <td scope="row">
         <a href="#" class="btn btn-danger" @click.prevent="modal">удалить</a>
@@ -17,7 +20,7 @@
         >
       </td>
     </tr>
-
+    <div></div>
     <tr v-if="edit">
       <td scope="row">
         <InputComponent

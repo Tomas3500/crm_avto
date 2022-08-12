@@ -15,7 +15,6 @@
           <span class="invalid" v-if="$v.email.$dirty && !$v.email.required"
             >обязательное поле
           </span>
-
           <span class="invalid" v-if="$v.email.$dirty && !$v.email.email"
             >Введите коректно Email
           </span>

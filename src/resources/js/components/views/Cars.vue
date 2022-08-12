@@ -45,6 +45,15 @@
     >
     <div>Жалобы</div>
     <textarea v-model="problem" cols="70" rows="10"></textarea>
+    <p>
+      <span class="invalid" v-if="$v.problem.$dirty && !$v.problem.required"
+        >введите поле</span
+      >
+      <span class="invalid" v-if="!$v.problem.maxLength"
+        >максимально количество знаков
+        {{ $v.problem.$params.maxLength.max }}</span
+      >
+    </p>
 
     <!-- select clint -->
     <div class="row">
@@ -57,12 +66,23 @@
         </select>
       </div>
     </div>
-
+    <!-- upload file -->
+    <FileUploadComponent
+      @upload-file="uploadFile"
+      ref="image"
+      type="file"
+      lable="Загрузка
+    изоброжения"
+    />
+    <span class="invalid" v-if="errorFile"
+      >Ошибка неверный формат файла , выберите расширение: jpg,svg,png</span
+    >
     <div class="mt-4">
       <button
         type="button"
-        @click.prevent="add"
+        @click.prevent="add($event)"
         value="store"
+        :disabled="disabled"
         class="btn btn-outline-dark"
       >
         добавить
@@ -115,9 +135,15 @@
 import InputComponentVue from "../layout/InputComponent.vue";
 import indexClint from "../mixins/indexClint.js";
 import ModalComponent from "../ModalComponent.vue";
+import FileUploadComponent from "../layout/FileUploadComponent.vue";
 
 import ShowComponent from "../car/ShowComponent.vue";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  maxLength,
+  helpers,
+} from "vuelidate/lib/validators";
 
 export default {
   name: "Cars",
@@ -134,6 +160,10 @@ export default {
       search: "",
       secrchSelect: "",
       showModal: false,
+      image: null,
+      errorFile: null,
+      disabled: false,
+      typeImage: ["image/jpeg", "image/png", "image/svg+xml"],
     };
   },
 
@@ -141,6 +171,7 @@ export default {
     InputComponentVue,
     ShowComponent,
     ModalComponent,
+    FileUploadComponent,
   },
 
   validations: {
@@ -159,6 +190,7 @@ export default {
     problem: {
       required,
       minLength: minLength(5),
+      maxLength: maxLength(255),
     },
   },
 
@@ -176,13 +208,31 @@ export default {
 
   methods: {
     getCars() {
-      axios.get("/api/car/index").then((response) => {
-        this.cars = response.data;
-      });
+      axios
+        .get("/api/car/index")
+        .then((response) => {
+          this.cars = response.data;
+        })
+        .then((response) => {
+          console.log(response);
+        });
     },
 
     editCar(id) {
       this.id = id;
+    },
+
+    uploadFile(event) {
+      this.image = event.target.files[0];
+      console.log(this.image);
+      let indexImage = this.typeImage.indexOf(this.image.type);
+
+      if (indexImage != -1) {
+        return;
+      } else {
+        this.disabled = true;
+        return (this.errorFile = true);
+      }
     },
 
     updataCar(event) {
@@ -219,20 +269,25 @@ export default {
     },
 
     add() {
-      if (this.$v.$invalid) {
-        this.$v.$touch();
-        return alert("заполните поля");
-      }
+      // if (this.$v.$invalid) {
+      //   this.$v.$touch();
+      //   return alert("заполните поля");
+      // }
+      let formData = new FormData();
+      formData.append("image", this.image);
+      formData.append("brand", this.brand);
+      formData.append("license_plate", this.license_plate);
+      formData.append("vin_code", this.vin_code);
+      formData.append("problem", this.problem);
+      formData.append("clint_id", this.clint_id);
       axios
-        .post("/api/car/store", {
-          brand: this.brand,
-          license_plate: this.license_plate,
-          vin_code: this.vin_code,
-          problem: this.problem,
-          clint_id: this.clint_id,
+        .post("/api/car/store", formData)
+        .then((response) => {
+          console.log(response);
         })
         .then((response) => {
           this.getCars();
+          console.log(response);
         });
     },
   },

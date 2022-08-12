@@ -32,7 +32,6 @@ class ClintController extends Controller
     {
 
         $clint->find($id)->delete();
-        
         return response()->json([],200);
     }
 

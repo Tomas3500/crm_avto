@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnClintIdToTableCars extends Migration
+class AddColumnImageToTableCars extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,7 @@ class AddColumnClintIdToTableCars extends Migration
     {
         Schema::table('cars', function (Blueprint $table) {
             //
-            $table->bigInteger('clint_id')->unsigned();
-            $table->foreign('clint_id')->references('id')->on('clints')->onDelete('cascade');
+            $table->string('image')->nullable();
         });
     }
 
@@ -29,7 +28,7 @@ class AddColumnClintIdToTableCars extends Migration
     {
         Schema::table('cars', function (Blueprint $table) {
             //
-           $table->dropForeign(['clint_id']);
+            $table->dropColumn('image');
         });
     }
 }
