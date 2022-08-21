@@ -8,7 +8,10 @@
       <td scope="row">{{ car.problem }}</td>
       <td scope="row">{{ car.clint.name }}</td>
       <td scope="row">
-        <img :src="car.image" alt="" />
+        <img :src="car.image_path" alt="" />
+      </td>
+      <td v-if="imageBlock" scope="row">
+        <img :src="'storage/image/blockImage.png'" alt="" />
       </td>
 
       <td scope="row">
@@ -68,7 +71,7 @@ export default {
       vin_code: null,
       problem: null,
       edit: false,
-      // clint_id: null,
+      imageBlock: null,
     };
   },
   props: {
@@ -90,6 +93,10 @@ export default {
   methods: {
     modal() {
       this.$emit("modal", this.car.id);
+    },
+
+    blockImage() {
+      this.$emit("block-image", this.imageBlock);
     },
 
     editCar() {

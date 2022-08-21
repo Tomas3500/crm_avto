@@ -99,7 +99,7 @@
     <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit.  -->
     <table class="table mt-3">
       <thead>
-        <span v-if="cars.lenght === 0">нет автомобиля</span>
+        <!-- <span v-if="cars.lenght === 0">нет автомобиля</span> -->
         <tr>
           <th scope="col">id</th>
           <th scope="col">марка авто</th>
@@ -163,7 +163,7 @@ export default {
       image: null,
       errorFile: null,
       disabled: false,
-      typeImage: ["image/jpeg", "image/png", "image/svg+xml"],
+      typeImage: ["image/jpeg", "image/png", "image/svg+xml", "text/plain"],
     };
   },
 
@@ -211,11 +211,10 @@ export default {
       axios
         .get("/api/car/index")
         .then((response) => {
-          this.cars = response.data;
-        })
-        .then((response) => {
+          this.cars = response.data.data.cars;
           console.log(response);
-        });
+        })
+        .then((response) => {});
     },
 
     editCar(id) {
@@ -223,15 +222,15 @@ export default {
     },
 
     uploadFile(event) {
+      console.log(event.target.files);
       this.image = event.target.files[0];
-      console.log(this.image);
       let indexImage = this.typeImage.indexOf(this.image.type);
-
       if (indexImage != -1) {
-        return;
+        this.disabled = false;
+        this.errorFile = false;
       } else {
         this.disabled = true;
-        return (this.errorFile = true);
+        this.errorFile = true;
       }
     },
 
@@ -280,14 +279,22 @@ export default {
       formData.append("vin_code", this.vin_code);
       formData.append("problem", this.problem);
       formData.append("clint_id", this.clint_id);
+
       axios
         .post("/api/car/store", formData)
         .then((response) => {
+          this.getCars();
+          this.image = null;
+          this.brand = null;
+          this.license_plate = null;
+          this.vin_code = null;
+          this.problem = null;
+          this.clint_id = null;
           console.log(response);
         })
-        .then((response) => {
-          this.getCars();
-          console.log(response);
+
+        .catch((errors) => {
+          console.log(errors);
         });
     },
   },

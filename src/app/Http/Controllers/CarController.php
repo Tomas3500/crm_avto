@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Car;
+use App\Models\Clint;
 use Illuminate\Http\Request;
 use App\Http\Requests\CarRequest;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Http\Resources\CarResource;
+use App\Http\Resources\CarResourceCollection;
 
 
 class CarController extends Controller
@@ -14,49 +18,65 @@ class CarController extends Controller
 
     public function index()
     {
-        
-        $car = Car::with('clint')->get();
-        return response()->json($car);
 
+        return new CarResourceCollection(Car::all());
     }
 
     public function store(CarRequest $request)
-    {   
-
-        $data = $request->validated();
-        $fileNmae = $request->file('image')->getClientOriginalName();
-
-        $image = Image::make($request->file('image'));
-        $image->resize(200,200);
-
-        $image->save( public_path('storage/image/').$fileNmae);
-
-        $data['image'] = 'storage/image/'.$fileNmae;
-        Car::create($data);
-
-        return response()->json($data);
-
-        
-    }
-
-
-        public function delete(Car $car, $id)
     {
 
-        $car->find($id)->delete();
-        
-        return response()->json([],200);
+        $data = $request->validated();
+
+        // dd(isset($request->image));
+
+        if ($request->hasFile('image')) {
+            $typeFile = $request->file('image')->getMimeType();
+            if ($typeFile == 'text/plain' || $typeFile == 'application/pdf' || $data['image'] == null) {
+                $data['image'] = 'image/blockImage.png';
+                Car::create($data);
+                // Car::create($data);
+            } else {
+                $fileName = $request->file('image')->hashName();
+                $image = Image::make($request->file('image'));
+                $image->resize(200, 200);
+                $data['image'] = 'image/' . $fileName;
+                $image->save(storage_path('app/public/image/') . $fileName);
+
+                // $data['image'] = 'image/blockImage.png';
+            }
+            Car::create($data);
+
+
+        } else {
+            $data['image'] = 'image/blockImage.png';
+            Car::create($data);
+            // $data['image'] = 'image/blockImage.png';
+        }
+
+        return response()->json($data);
     }
 
-    public function update(CarRequest $request, $id )
-    
+
+
+    public function delete(Car $car)
+
+    {
+
+        Storage::disk('public')->delete($car->image);
+        $car->find($car->id)->delete();
+
+        return response()->json(['delete'], 200);
+    }
+
+
+    public function update(CarRequest $request, $id)
+
     {
         $data = $request->validated();
         $clint = Car::findOrfail($id);
-        
+
         $clint->update($data);
 
         return response()->json($data);
     }
-
 }

@@ -117,7 +117,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/clint/index").then(function (response) {
-        _this.clints = response.data;
+        _this.clints = response.data.data;
       });
     }
   }

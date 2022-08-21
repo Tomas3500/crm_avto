@@ -21,9 +21,9 @@ class Car extends Model
         'image'
     ];
 
-        public function clint()
+    public function clint()
     {
-        return $this->belongsTo(Clint::class);
+        return $this->belongsTo(Clint::class,'clint_id','id');
     }
 
 }

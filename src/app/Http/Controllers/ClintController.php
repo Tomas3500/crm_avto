@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Clint;
 use App\Http\Requests\ClintRequest;
+use App\Http\Resources\ClintResource;
+use App\Http\Resources\ClintResourceCollection;
 
 
 use Illuminate\Http\Request;
@@ -13,9 +15,12 @@ class ClintController extends Controller
 
     public function index()
     {
-        $clints = Clint::all();
 
-         return response()->json($clints);
+
+        // dd(new ClintResource(Clint::first()));
+
+        return new ClintResourceCollection(Clint::all());
+
 
     }
 

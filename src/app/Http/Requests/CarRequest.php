@@ -24,13 +24,12 @@ class CarRequest extends FormRequest
     public function rules()
     {
         return [
-        'brand' =>'required|string|max:255',
-        'vin_code'=>'required|string|max:17',
-        'license_plate'=>'required|string|max:8|',
-        'problem'=>'nullable|string|max:255',
-        'image' => 'nullable|file',
-        'clint_id' => 'required|integer|exists:clints,id',
+            'brand' => 'required|string|max:255',
+            'vin_code' => 'required|string|max:17',
+            'license_plate' => 'required|string|max:8|',
+            'problem' => 'nullable|string|max:255',
+            'image' => 'nullable|max:2000',
+            'clint_id' => 'required|integer|exists:clints,id',
         ];
     }
 }
-

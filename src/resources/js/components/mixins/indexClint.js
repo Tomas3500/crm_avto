@@ -14,10 +14,11 @@ export default {
     methods: {
         getClint() {
             axios.get("/api/clint/index").then((response) => {
-                this.clints = response.data;
+                this.clints = response.data.data;
             });
         },
     }
+
 
 
 

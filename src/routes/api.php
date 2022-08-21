@@ -44,7 +44,7 @@ Route::prefix('clint')->group(function () {
 Route::prefix('car')->group(function () {
     Route::post('/store', [CarController::class, 'store']);
     Route::get('/index', [CarController::class, 'index']);
-    Route::delete('/{id}', [CarController::class, 'delete']);
+    Route::delete('/{car}', [CarController::class, 'delete']);
     Route::patch('/{car}', [CarController::class, 'update']);
     
 });

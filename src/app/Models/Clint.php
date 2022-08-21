@@ -13,6 +13,7 @@ class Clint extends Model
 
         protected $fillable = [
 
+        'id',   
         'name',
         'phone_number'
     ];

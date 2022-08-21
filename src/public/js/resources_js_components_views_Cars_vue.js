@@ -115,6 +115,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -125,8 +128,8 @@ __webpack_require__.r(__webpack_exports__);
       license_plate: null,
       vin_code: null,
       problem: null,
-      edit: false // clint_id: null,
-
+      edit: false,
+      imageBlock: null
     };
   },
   props: {
@@ -145,6 +148,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     modal: function modal() {
       this.$emit("modal", this.car.id);
+    },
+    blockImage: function blockImage() {
+      this.$emit("block-image", this.imageBlock);
     },
     editCar: function editCar() {
       this.edit = !this.edit;
@@ -440,7 +446,7 @@ __webpack_require__.r(__webpack_exports__);
       image: null,
       errorFile: null,
       disabled: false,
-      typeImage: ["image/jpeg", "image/png", "image/svg+xml"]
+      typeImage: ["image/jpeg", "image/png", "image/svg+xml", "text/plain"]
     };
   },
   components: {
@@ -485,24 +491,24 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get("/api/car/index").then(function (response) {
-        _this2.cars = response.data;
-      }).then(function (response) {
+        _this2.cars = response.data.data.cars;
         console.log(response);
-      });
+      }).then(function (response) {});
     },
     editCar: function editCar(id) {
       this.id = id;
     },
     uploadFile: function uploadFile(event) {
+      console.log(event.target.files);
       this.image = event.target.files[0];
-      console.log(this.image);
       var indexImage = this.typeImage.indexOf(this.image.type);
 
       if (indexImage != -1) {
-        return;
+        this.disabled = false;
+        this.errorFile = false;
       } else {
         this.disabled = true;
-        return this.errorFile = true;
+        this.errorFile = true;
       }
     },
     updataCar: function updataCar(event) {
@@ -548,11 +554,17 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("problem", this.problem);
       formData.append("clint_id", this.clint_id);
       axios.post("/api/car/store", formData).then(function (response) {
-        console.log(response);
-      }).then(function (response) {
         _this5.getCars();
 
+        _this5.image = null;
+        _this5.brand = null;
+        _this5.license_plate = null;
+        _this5.vin_code = null;
+        _this5.problem = null;
+        _this5.clint_id = null;
         console.log(response);
+      })["catch"](function (errors) {
+        console.log(errors);
       });
     }
   }
@@ -584,7 +596,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/api/clint/index").then(function (response) {
-        _this.clints = response.data;
+        _this.clints = response.data.data;
       });
     }
   }
@@ -1524,8 +1536,16 @@ var render = function () {
       ]),
       _vm._v(" "),
       _c("td", { attrs: { scope: "row" } }, [
-        _c("img", { attrs: { src: _vm.car.image, alt: "" } }),
+        _c("img", { attrs: { src: _vm.car.image_path, alt: "" } }),
       ]),
+      _vm._v(" "),
+      _vm.imageBlock
+        ? _c("td", { attrs: { scope: "row" } }, [
+            _c("img", {
+              attrs: { src: "storage/image/blockImage.png", alt: "" },
+            }),
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("td", { attrs: { scope: "row" } }, [
         _c(
@@ -1970,13 +1990,7 @@ var render = function () {
         "table",
         { staticClass: "table mt-3" },
         [
-          _c("thead", [
-            _vm.cars.lenght === 0
-              ? _c("span", [_vm._v("нет автомобиля")])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._m(0),
-          ]),
+          _vm._m(0),
           _vm._v(" "),
           _vm._l(_vm.searchHandler, function (car) {
             return _c("ShowComponent", {
@@ -2055,18 +2069,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("id")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("марка авто")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("номерной знак")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("Vin code")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("жалоба")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("клиент")]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("id")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("марка авто")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("номерной знак")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Vin code")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("жалоба")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("клиент")]),
+      ]),
     ])
   },
 ]
