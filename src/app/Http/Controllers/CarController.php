@@ -27,30 +27,21 @@ class CarController extends Controller
 
         $data = $request->validated();
 
-        // dd(isset($request->image));
-
         if ($request->hasFile('image')) {
             $typeFile = $request->file('image')->getMimeType();
             if ($typeFile == 'text/plain' || $typeFile == 'application/pdf' || $data['image'] == null) {
                 $data['image'] = 'image/blockImage.png';
                 Car::create($data);
-                // Car::create($data);
             } else {
                 $fileName = $request->file('image')->hashName();
                 $image = Image::make($request->file('image'));
                 $image->resize(200, 200);
                 $data['image'] = 'image/' . $fileName;
                 $image->save(storage_path('app/public/image/') . $fileName);
-
-                // $data['image'] = 'image/blockImage.png';
             }
-            Car::create($data);
-
-
         } else {
             $data['image'] = 'image/blockImage.png';
             Car::create($data);
-            // $data['image'] = 'image/blockImage.png';
         }
 
         return response()->json($data);
