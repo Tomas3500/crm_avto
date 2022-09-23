@@ -85,10 +85,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RegistComponent",
@@ -114,10 +110,7 @@ __webpack_require__.r(__webpack_exports__);
       minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.minLength)(8)
     }
   },
-  mounted: function mounted() {
-    console.log(this.users);
-    console.log("login.");
-  },
+  mounted: function mounted() {},
   methods: {
     regist: function regist() {
       var _this = this;
@@ -132,9 +125,13 @@ __webpack_require__.r(__webpack_exports__);
           email: _this.email,
           name: _this.name,
           password: _this.password
-        }).then(function (r) {
+        }).then(function (response) {
+          console.log(response);
+          localStorage.setItem("api_token", response.data.plainTextToken // config.headers["X-XSRF-TOKEN"]
+          );
+
           _this.$router.push({
-            name: "user.cabinet"
+            name: "clint"
           });
         });
       });
@@ -824,12 +821,6 @@ var render = function () {
               {
                 staticClass: "btn btn-primary",
                 attrs: { type: "submit", value: "register" },
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.regist.apply(null, arguments)
-                  },
-                },
               },
               [_vm._v("\n        Регистрация\n      ")]
             ),

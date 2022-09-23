@@ -1,5 +1,5 @@
 <template>
-  <nav class="col-lg-4 d-none d-md-block fs-4 sidebar">
+  <nav class="col-2 d-none d-md-block fs-4 sidebar">
     <div class="sidebar-sticky">
       <ul class="nav flex-column">
         <router-link
@@ -12,6 +12,10 @@
           <a class="nav-link" href="#">{{ link.nameLink }}</a>
         </router-link>
       </ul>
+      <!-- ?? -->
+      <a v-if="token" href="#" class="nav-link" v-on:click.prevent="logout"
+        >Выход</a
+      >
     </div>
   </nav>
 </template>
@@ -19,7 +23,6 @@
 <script>
 export default {
   name: "navbar",
-
   data() {
     return {
       links: [
@@ -30,8 +33,23 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.links);
+  props: {
+    token: {
+      type: String,
+    },
+  },
+
+  methods: {
+    logout() {
+      axios.get("/sanctum/csrf-cookie").then((response) => {
+        axios.post("/api/logout").then((response) => {
+          console.log(localStorage.getItem("api_token"));
+          console.log(localStorage.getItem("api_token"));
+          localStorage.removeItem("api_token");
+          this.$router.push({ name: "user.login" });
+        });
+      });
+    },
   },
 };
 </script>

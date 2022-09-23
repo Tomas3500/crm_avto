@@ -15,7 +15,6 @@
           <span class="invalid" v-if="$v.email.$dirty && !$v.email.required"
             >обязательное поле
           </span>
-
           <span class="invalid" v-if="$v.email.$dirty && !$v.email.email"
             >Введите коректно Email
           </span>
@@ -59,14 +58,11 @@
             >минимально 8 символов</span
           >
         </div>
-        <button
-          type="submit"
-          @click.prevent="regist"
-          value="register"
-          class="btn btn-primary"
-        >
+        <button type="submit" value="register" class="btn btn-primary">
           Регистрация
         </button>
+
+        <!-- !! метод! -->
         <router-link :to="{ name: 'user.login' }" class="btn-secondary btn"
           >Войти в систему
         </router-link>
@@ -106,11 +102,7 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.users);
-
-    console.log("login.");
-  },
+  mounted() {},
 
   methods: {
     regist() {
@@ -127,8 +119,14 @@ export default {
             password: this.password,
           })
 
-          .then((r) => {
-            this.$router.push({ name: "user.cabinet" });
+          .then((response) => {
+            console.log(response);
+            localStorage.setItem(
+              "api_token",
+              response.data.plainTextToken
+              // config.headers["X-XSRF-TOKEN"]
+            );
+            this.$router.push({ name: "clint" });
           });
       });
     },

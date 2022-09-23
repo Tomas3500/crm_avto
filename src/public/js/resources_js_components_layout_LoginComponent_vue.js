@@ -56,8 +56,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "LoginComponent",
@@ -93,9 +91,10 @@ __webpack_require__.r(__webpack_exports__);
           password: _this.password
         }).then(function (response) {
           _this.user = response.data;
+          localStorage.setItem("api_token", response.data.plainTextToken);
 
           _this.$router.push({
-            name: "user.cabinet"
+            name: "clint"
           });
         });
       });
@@ -716,17 +715,8 @@ var render = function () {
         _vm._v(" "),
         _c(
           "button",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { type: "submit" },
-            on: {
-              click: function ($event) {
-                $event.preventDefault()
-                return _vm.login.apply(null, arguments)
-              },
-            },
-          },
-          [_vm._v("\n      Войти\n    ")]
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("Войти")]
         ),
       ]
     ),

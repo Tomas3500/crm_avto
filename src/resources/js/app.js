@@ -41,3 +41,18 @@ const app = new Vue({
     el: '#app',
     render: h => h(App)
 });
+
+router.beforeEach((to, from, next) => {
+
+    const token = localStorage.getItem('api_token');
+
+    if ((to.name !== 'user.login' && to.name !== 'user.regist') && !token) {
+
+        next({ name: 'user.regist' })
+    }
+    if ((to.name === 'user.login' || to.name == 'user.regist') && token) {
+
+    }
+    next()
+
+})
