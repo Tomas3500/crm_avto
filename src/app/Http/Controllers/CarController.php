@@ -26,7 +26,6 @@ class CarController extends Controller
     {
 
         $data = $request->validated();
-
         if ($request->hasFile('image')) {
             $typeFile = $request->file('image')->getMimeType();
             if ($typeFile == 'text/plain' || $typeFile == 'application/pdf' || $data['image'] == null) {
@@ -38,6 +37,7 @@ class CarController extends Controller
                 $image->resize(200, 200);
                 $data['image'] = 'image/' . $fileName;
                 $image->save(storage_path('app/public/image/') . $fileName);
+                Car::create($data);
             }
         } else {
             $data['image'] = 'image/blockImage.png';
