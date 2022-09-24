@@ -491,15 +491,14 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get("/api/car/index").then(function (response) {
-        _this2.cars = response.data.data.cars;
-        console.log(response);
+        _this2.cars = response.data.data.cars; // console.log(response);
       }).then(function (response) {});
     },
     editCar: function editCar(id) {
       this.id = id;
     },
     uploadFile: function uploadFile(event) {
-      console.log(event.target.files);
+      // console.log(event.target.files);
       this.image = event.target.files[0];
       var indexImage = this.typeImage.indexOf(this.image.type);
 
@@ -554,18 +553,17 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("problem", this.problem);
       formData.append("clint_id", this.clint_id);
       axios.post("/api/car/store", formData).then(function (response) {
-        _this5.getCars();
+        // this.image = null;
+        // this.brand = null;
+        // this.license_plate = null;
+        // this.vin_code = null;
+        // this.problem = null;
+        // this.clint_id = null;
+        _this5.getCars(); // console.log(response);
 
-        _this5.image = null;
-        _this5.brand = null;
-        _this5.license_plate = null;
-        _this5.vin_code = null;
-        _this5.problem = null;
-        _this5.clint_id = null;
-        console.log(response);
-      })["catch"](function (errors) {
-        console.log(errors);
-      });
+      }); // .catch((errors) => {
+      //   console.log(errors);
+      // });
     }
   }
 });

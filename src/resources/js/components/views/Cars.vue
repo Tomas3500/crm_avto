@@ -212,7 +212,7 @@ export default {
         .get("/api/car/index")
         .then((response) => {
           this.cars = response.data.data.cars;
-          console.log(response);
+          // console.log(response);
         })
         .then((response) => {});
     },
@@ -222,7 +222,7 @@ export default {
     },
 
     uploadFile(event) {
-      console.log(event.target.files);
+      // console.log(event.target.files);
       this.image = event.target.files[0];
       let indexImage = this.typeImage.indexOf(this.image.type);
       if (indexImage != -1) {
@@ -279,23 +279,21 @@ export default {
       formData.append("vin_code", this.vin_code);
       formData.append("problem", this.problem);
       formData.append("clint_id", this.clint_id);
+      axios.post("/api/car/store", formData).then((response) => {
+        // this.image = null;
+        // this.brand = null;
+        // this.license_plate = null;
+        // this.vin_code = null;
+        // this.problem = null;
+        // this.clint_id = null;
+        this.getCars();
 
-      axios
-        .post("/api/car/store", formData)
-        .then((response) => {
-          this.getCars();
-          this.image = null;
-          this.brand = null;
-          this.license_plate = null;
-          this.vin_code = null;
-          this.problem = null;
-          this.clint_id = null;
-          console.log(response);
-        })
+        // console.log(response);
+      });
 
-        .catch((errors) => {
-          console.log(errors);
-        });
+      // .catch((errors) => {
+      //   console.log(errors);
+      // });
     },
   },
 };
